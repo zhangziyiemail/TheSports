@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="netAvailable"
+            type="Boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/al_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPink"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="@string/app_name"
+                app:titleTextColor="@color/cardview_dark_background" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/al_bar">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorE6E6E6"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/mobile_navigation"
+                tools:context=".ui.MainActivity" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="12dp"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="no network"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:visibility="@{netAvailable ? View.GONE : View.VISIBLE}" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

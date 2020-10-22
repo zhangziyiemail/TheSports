@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TheSports</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_select">Home</string>
+    <string name="sports">Sports</string>
+</resources>
