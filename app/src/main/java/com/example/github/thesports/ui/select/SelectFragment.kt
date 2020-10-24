@@ -25,9 +25,9 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
 
     var sportList = ArrayList<String>()
 
-    private val mAdapter by lazy {
-        SelectPageAdapter()
-    }
+//    private val mAdapter by lazy {
+//        SelectPageAdapter()
+//    }
 
     private val mViewModel by lazy {
         ViewModelProvider(requireActivity(), SelectViewModeFactory(SelectListViewRepository())).get(
@@ -35,9 +35,11 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
         )
     }
 
-    private val mScrollListener by lazy {
-        MyScrollListener()
+    private val mAdapter by lazy{
+        SelectPageAdapter()
     }
+
+
 
     override fun getLayoutId(): Int = R.layout.fragment_select
 
@@ -49,36 +51,17 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
             it.forEach(){
                 sportList.add(it.sprot.strSport)
             }
-
         })
 
     }
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
        (activity as MainActivity)?.showToolBar(false)
-
-        tv_title.setOnClickListener {
-            val builder = AlertDialog.Builder(activity as MainActivity)
-            builder.setTitle(R.string.sports)
-                .setItems(
-                    sportList.toTypedArray(),
-                    DialogInterface.OnClickListener { dialog, which ->
-                        rv_sports.scrollToPosition(which)
-                    })
-            builder.create().show()
-        }
-
-        tv_title.text = "Click to select sport"
-
-        fab.setOnClickListener {
-            mNavController.navigate(R.id.action_selectFragment_to_homeFragment)
-        }
-
         mBinding?.let { binding ->
             binding.adapter = mAdapter
-            binding.recyclerscroll = mScrollListener
-
-
+        }
+        fab.setOnClickListener {
+            mNavController.navigate(R.id.action_selectFragment_to_homeFragment)
         }
     }
 

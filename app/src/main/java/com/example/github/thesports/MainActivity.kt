@@ -1,24 +1,21 @@
 package com.example.github.thesports
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.github.thesports.base.BaseActivity
 import com.example.github.thesports.databinding.ActivityMainBinding
 import com.example.github.thesports.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.yesButton
+import kotlinx.android.synthetic.main.fragment_select.*
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     private var availableCount = 0
@@ -52,6 +49,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mBinding.netAvailable = availableCount > 0
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         manager.unregisterNetworkCallback(netStateCallback)
@@ -80,15 +82,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onBackPressed()
     }
 
-    fun toolBarTitle(title: String){
+    fun toolBarTitle(title: String) {
         toolbar.title = title
     }
 
-    fun showToolBar(boolean: Boolean){
+    fun showToolBar(boolean: Boolean) {
         if (!boolean)
             toolbar.visibility = View.GONE
         else
             toolbar.visibility = View.VISIBLE
+    }
+
+    fun toolbarTitleClick(sportList: ArrayList<String>) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.sports)
+            .setItems(
+                sportList.toTypedArray(),
+                DialogInterface.OnClickListener { dialog, which ->
+//                    rv_sports.scrollToPosition(which)
+                })
+            .setCancelable(true)
+
+        builder.create().show()
     }
 
 

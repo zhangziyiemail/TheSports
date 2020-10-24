@@ -21,11 +21,9 @@ class SelectViewModel(private val response: SelectListViewRepository) : ViewMode
 
                     val allSpourts = response.getAllSports()
                     MyDatabaseUtils.SportDao.insertSportList(allSpourts)
-                    LogUtils.info("allSpourts" + allSpourts.size)
 
                     val allLeagues = response.getAllLeagues()
                     MyDatabaseUtils.leagueDao.insertLeagueList(allLeagues)
-                    LogUtils.info("allLeagues" + allLeagues.size)
                 }
                 sportWithLeague.value = MyDatabaseUtils.SportDao.getSportWithLeague()
             }

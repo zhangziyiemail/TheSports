@@ -8,9 +8,5 @@ import androidx.recyclerview.widget.RecyclerView
  **/
 
 
-@BindingAdapter("bind:recyclerscroll")
-fun setMyScrollListener(rv:RecyclerView,listener: RecyclerView.OnScrollListener){
-    rv.addOnScrollListener(listener)
-}
 
 

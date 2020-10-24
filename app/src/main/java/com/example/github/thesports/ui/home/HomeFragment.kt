@@ -3,51 +3,41 @@ package com.example.github.thesports.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.github.thesports.MainActivity
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
-import com.example.github.thesports.base.safeLaunch
-import com.example.github.thesports.data.MyDatabaseUtils
 import com.example.github.thesports.databinding.FragmentHomeBinding
-import com.example.github.thesports.entity.MyLeagues
-import com.example.github.thesports.utils.LogUtils
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     lateinit var toolbar: Toolbar
-    lateinit var myLeagues: List<MyLeagues>
-    var mMap = HashMap<String, String>()
-    var mSet = mutableSetOf<String>()
+    var sportList = ArrayList<String>()
+
 
     override fun getLayoutId(): Int = R.layout.fragment_home
 
+    private val mViewModel by lazy {
+        ViewModelProvider(requireActivity(), HomeViewModeFactory(HomeListViewRepository())).get(
+            HomeViewModel::class.java
+        )
+    }
+    lateinit var mAdapter: HomePagerAdapter
+
+
     override fun actionsOnViewInflate() {
-        GlobalScope.safeLaunch{
-            block ={
-                myLeagues = MyDatabaseUtils.myLeaguesDao.getMyLeagues()
-                for (item in myLeagues) {
-                    if (!mMap.containsKey(item.strSport)){
-                        mMap.put(item.strSport,item.strLeague)
-                    }else{
-                        mMap.put(item.strSport,mMap.get(item.strSport)!!+","+item.strLeague)
-                    }
-                }
-            }
-        }
-
-
-//        for (item in mMap.keys){
-//            tl_sports.addTab(tl_sports.newTab().setText(item),false)
-//        }
+        mViewModel.fatchLeagueEventList()
+        mViewModel.leagueWithEventList.observe(this, Observer {
+            mAdapter = HomePagerAdapter(parentFragmentManager,it)
+            view_pager.adapter = mAdapter
+            view_pager.setOffscreenPageLimit(1)
+        })
     }
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
-//        toolbar = (activity as MainActivity)?.toolbar
-
         (activity as MainActivity).showToolBar(true)
+        tl_leagues.setupWithViewPager(view_pager)
 
     }
 

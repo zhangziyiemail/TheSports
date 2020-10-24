@@ -1,8 +1,11 @@
 package com.example.github.thesports.ui.select
 
+import android.content.Context
 import android.view.View
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.github.thesports.R
@@ -11,11 +14,9 @@ import com.example.github.thesports.base.BaseViewHolder
 import com.example.github.thesports.data.MyDatabaseUtils
 import com.example.github.thesports.databinding.ItemSportBinding
 import com.example.github.thesports.entity.League
-import com.example.github.thesports.entity.MyLeagues
 import com.example.github.thesports.entity.Sport
 import com.example.github.thesports.entity.SportWithLeagueList
 import com.example.github.thesports.http.RetrofitManager
-import com.example.github.thesports.utils.LogUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import kotlinx.coroutines.*
@@ -25,7 +26,7 @@ import kotlinx.coroutines.*
  **/
 
 class SelectListViewRepository {
-    //version check. If there is data in the database, get it in the database, if not, access the network
+    val counterContext = newSingleThreadContext("CounterContext")
 
     suspend fun getAllSports(): MutableList<Sport> = withContext(Dispatchers.IO) {
         RetrofitManager.apiService.getAllSports().sports
@@ -52,24 +53,31 @@ class SelectPageAdapter : BaseRecyclerAdapter<SportWithLeagueList>(null) {
         for (league in data.leagueslist) {
 
             val chip = Chip(cgLeagues.context)
-            chip.setChipDrawable(ChipDrawable.createFromAttributes(cgLeagues.context, null, 0, R.style.Widget_MaterialComponents_Chip_Filter))
+            chip.setChipDrawable(
+                ChipDrawable.createFromAttributes(
+                    cgLeagues.context,
+                    null,
+                    0,
+                    R.style.Widget_MaterialComponents_Chip_Filter
+                )
+            )
             chip.text = league.strLeague
             chip.isChecked = league.follow
             chip.setOnClickListener(View.OnClickListener {
                 if (!(it as Chip).isChecked) {
                     GlobalScope.launch {
-                        MyDatabaseUtils.myLeaguesDao.deleteByUserId(league.idLeague)
+//                        MyDatabaseUtils.myLeaguesDao.deleteByUserId(league.idLeague)
                         MyDatabaseUtils.leagueDao.setfollow(league.idLeague, false)
                     }
                 } else {
                     GlobalScope.launch {
-                        MyDatabaseUtils.myLeaguesDao.insertLeague(
-                            MyLeagues(
-                                league.idLeague,
-                                league.strSport,
-                                league.strLeague
-                            )
-                        )
+//                        MyDatabaseUtils.myLeaguesDao.insertLeague(
+//                            MyLeagues(
+//                                league.idLeague,
+//                                league.strSport,
+//                                league.strLeague
+//                            )
+//                        )
                         MyDatabaseUtils.leagueDao.setfollow(league.idLeague, true)
                     }
                 }
@@ -108,21 +116,12 @@ class NewsListCacheDiffCall(
 }
 
 
-class MyScrollListener : RecyclerView.OnScrollListener() {
-    lateinit var mListen: () -> Unit
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        super.onScrolled(recyclerView, dx, dy)
 
-    }
-    fun setListener(listener: () -> Unit){
-        this.mListen = listener
-    }
-
-
-}
 //
 //interface ScrollCallback {
 //    fun onScrollCallback()
 //}
+
+
 
 

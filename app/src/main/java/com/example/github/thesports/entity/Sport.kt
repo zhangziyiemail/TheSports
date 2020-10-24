@@ -1,7 +1,6 @@
 package com.example.github.thesports.entity
 
 import android.os.Parcelable
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 
@@ -9,10 +8,10 @@ import kotlinx.android.parcel.Parcelize
  *   Created by Lee Zhang on 10/19/20 23:37
  **/
 
-data class SportData(var sports : MutableList<Sport>)
+data class SportData(var sports: MutableList<Sport>)
 
 
-data class LeagueData(var leagues : MutableList<League>)
+data class LeagueData(var leagues: MutableList<League>)
 
 @Parcelize
 @Entity
@@ -31,8 +30,7 @@ data class League(
     @PrimaryKey @ColumnInfo(name = "idLeague") val idLeague: Long = 0,
     val strSport: String,
     val strLeague: String,
-    val follow :Boolean = false
-//    val strLeagueAlternate: String
+    val follow: Boolean = false
 ) : Parcelable
 
 
@@ -45,6 +43,18 @@ data class SportWithLeagueList(
     )
     val leagueslist: List<League>
 )
+
+data class LeagueWithEvent(
+    @Embedded val league: League,
+    @Relation(
+        parentColumn = "idLeague",
+        entityColumn = "idLeague",
+        entity = LeagueEvent::class
+    )
+    val leagueEventList: List<LeagueEvent>
+)
+
+
 
 
 

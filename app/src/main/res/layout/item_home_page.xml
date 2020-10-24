@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="homeTeam"
+            type="String" />
+
+        <variable
+            name="awayTeam"
+            type="String" />
+
+        <variable
+            name="time"
+            type="String" />
+
+        <variable
+            name="date"
+            type="String" />
+
+        <variable
+            name="homeScore"
+            type="String" />
+
+        <variable
+            name="awayScore"
+            type="String" />
+
+        <variable
+            name="finised"
+            type="Boolean" />
+
+<!--        <variable-->
+<!--            name="OnItemClick"-->
+<!--            type="com.example.github.thesports.base.OnItemClickListener" />-->
+
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorD8D8D8"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_home"
+                        style="@style/text_home_pagr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@{homeTeam}" />
+
+                    <TextView
+                        android:id="@+id/tv_away"
+                        style="@style/text_home_pagr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_home"
+                        android:text="@{awayTeam}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_notifiy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    android:visibility="@{finised ? View.GONE : View.VISIBLE}">
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/bg_rectangle_d8"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@{date}"
+                            android:textColor="@color/color000000" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@{time}"
+                            android:textColor="@color/color000000" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_icon_noti"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/bg_d8d8d8"
+                        android:padding="5dp"
+                        android:src="@mipmap/icon_silence" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:visibility="@{finised ? View.VISIBLE : View.GONE}">
+
+                    <TextView
+                        style="@style/text_home_pagr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/bg_half_upd8"
+                        android:padding="5dp"
+                        android:text="@{homeScore}" />
+
+                    <TextView
+                        style="@style/text_home_pagr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_half_dowd8"
+                        android:padding="5dp"
+                        android:text="@{awayScore}" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

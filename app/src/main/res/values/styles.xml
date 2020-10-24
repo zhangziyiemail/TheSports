@@ -13,4 +13,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="text_home_pagr">
+<!--        android:textColor="@color/color000000"-->
+<!--        android:textSize="24dp"-->
+<!--        android:textStyle="bold"-->
+
+        <item name="android:layout_marginLeft">10dp </item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color434343</item>
+    </style>
+
 </resources>

@@ -1,10 +1,7 @@
 package com.example.github.thesports.data
 
 import androidx.room.*
-import com.example.github.thesports.entity.League
-import com.example.github.thesports.entity.MyLeagues
-import com.example.github.thesports.entity.Sport
-import com.example.github.thesports.entity.SportWithLeagueList
+import com.example.github.thesports.entity.*
 
 /**
  *   Created by Lee Zhang on 10/19/20 23:51
@@ -24,6 +21,9 @@ interface SportDao {
     @Query("SELECT * FROM Sport")
     suspend fun getSportWithLeague(): List<SportWithLeagueList>
 
+
+
+
 }
 
 @Dao
@@ -31,6 +31,12 @@ interface LeagueDao {
 
     @Query("select * from League")
     suspend fun getLeagueList(): List<League>
+
+    @Query("select * from League where follow =:isFollow")
+    suspend fun getFollowLeagueList(isFollow : Boolean): List<League>
+
+    @Query("select * from League where strSport = :sport")
+    suspend fun getLeagueOfSprotList(sport: String): List<League>
 
     @Query("update League set follow = :follow where  idLeague = :idLeague")
     suspend fun setfollow(idLeague: Long, follow : Boolean)
@@ -43,29 +49,18 @@ interface LeagueDao {
 }
 
 @Dao
-interface MyLeagueDao{
+interface LeagueEventDao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLeague(myLeagues: MyLeagues)
+    suspend fun insertLeagueList(league: List<LeagueEvent>)
 
-    @Query("DELETE FROM MyLeagues WHERE idLeague = :idLeague")
-    suspend fun deleteByUserId(idLeague: Long)
+    @Query("select * from LeagueEvent where strLeague =:strleague")
+    suspend fun getLeagueList(strleague : String):List<LeagueEvent>
 
-
-    @Query("select * from MyLeagues")
-    suspend fun getMyLeagues():List<MyLeagues>
-
-    @Query("select *from MyLeagues where strSport IN (:sport)")
-    suspend fun getMyLeagyseWithSport(sport: String): List<MyLeagues>
+    @Transaction
+    @Query("SELECT * FROM League where follow =:isFollow")
+    suspend fun getFollowLeagueWithEvent(isFollow : Boolean): List<LeagueWithEvent>
 }
 
-
-/**
- *
-select  name ,
-hobby = ( stuff((select ',' + hobby from rows_to_row where name = Test.name for xml path('')), 1, 1, '') )
-from rows_to_row as Test
-group by name
- */
 
 

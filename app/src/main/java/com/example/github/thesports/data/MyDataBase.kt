@@ -6,17 +6,18 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.github.thesports.MyApplication
 import com.example.github.thesports.entity.League
-import com.example.github.thesports.entity.MyLeagues
+import com.example.github.thesports.entity.LeagueEvent
 import com.example.github.thesports.entity.Sport
 
 /**
  *   Created by Lee Zhang on 10/19/20 23:36
  **/
-@Database(entities = [Sport::class,League::class,MyLeagues::class],version = 1,exportSchema = false)
+@Database(entities = [Sport::class,League::class, LeagueEvent::class],version = 1,exportSchema = false)
 abstract class MyDataBase : RoomDatabase(){
     abstract fun selectSportDao() : SportDao
     abstract fun leagueDao(): LeagueDao
-    abstract fun myLeaguesDao() :MyLeagueDao
+    abstract fun leaguEventDao():LeagueEventDao
+
 }
 
 object MyDatabaseUtils{
@@ -27,5 +28,5 @@ object MyDatabaseUtils{
 
     val SportDao = myDataBase.selectSportDao()
     val leagueDao = myDataBase.leagueDao()
-    val myLeaguesDao =  myDataBase.myLeaguesDao()
+    val leagueEventDao= myDataBase.leaguEventDao()
 }
