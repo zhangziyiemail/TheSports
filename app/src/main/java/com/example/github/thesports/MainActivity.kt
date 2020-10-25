@@ -8,18 +8,21 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import com.example.github.thesports.base.BaseActivity
+import com.example.github.thesports.base.CoroutineCallback
 import com.example.github.thesports.databinding.ActivityMainBinding
 import com.example.github.thesports.ui.home.HomeFragment
+import com.example.github.thesports.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_select.*
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
+    lateinit var onViewClick:((Int)->Unit)
     private var availableCount = 0
-    val hasLogin = MutableLiveData<Boolean>()
+
 
     private val manager: ConnectivityManager by lazy {
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -49,10 +52,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mBinding.netAvailable = availableCount > 0
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (::onViewClick.isInitialized)onViewClick.invoke(item.itemId) else LogUtils.error("onOptionsItemSelected")
+//        when(item.itemId){
+//            R.id.menu_all-> LogUtils.error("initFragment all")
+//            R.id.menu_ended->LogUtils.error("initFragment ended")
+//            R.id.menu_future->LogUtils.error("initFragment future")
+//            R.id.menu_sort->LogUtils.error("initFragment sort")
+//            R.id.menu_search->LogUtils.error("initFragment search")
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
-        return super.onCreateOptionsMenu(menu)
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -63,6 +74,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initActivity(savedInstanceState: Bundle?) {
         manager.registerNetworkCallback(request, netStateCallback)
+//
+        toolbar.setOnMenuItemClickListener{
+
+            if (::onViewClick.isInitialized)onViewClick.invoke(it.itemId) else LogUtils.error("onOptionsItemSelected")
+            false
+        }
     }
 
     override fun onBackPressed() {
@@ -82,6 +99,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onBackPressed()
     }
 
+
     fun toolBarTitle(title: String) {
         toolbar.title = title
     }
@@ -92,6 +110,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         else
             toolbar.visibility = View.VISIBLE
     }
+
+
 
     fun toolbarTitleClick(sportList: ArrayList<String>) {
         val builder = AlertDialog.Builder(this)
@@ -105,6 +125,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         builder.create().show()
     }
-
-
 }
+
+

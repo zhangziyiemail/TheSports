@@ -31,6 +31,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPink"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:menu="@menu/search_view"
                 app:title="@string/app_name"
                 app:titleTextColor="@color/cardview_dark_background" />
 

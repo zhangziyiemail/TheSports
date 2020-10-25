@@ -57,6 +57,10 @@ interface LeagueEventDao{
     @Query("select * from LeagueEvent where strLeague =:strleague")
     suspend fun getLeagueList(strleague : String):List<LeagueEvent>
 
+    @Query("select * from LeagueEvent where strLeague =:strleague & strStatus =:mark")
+    suspend fun getEndedLeagueList(strleague : String,mark: String):List<LeagueEvent>
+
+
     @Transaction
     @Query("SELECT * FROM League where follow =:isFollow")
     suspend fun getFollowLeagueWithEvent(isFollow : Boolean): List<LeagueWithEvent>

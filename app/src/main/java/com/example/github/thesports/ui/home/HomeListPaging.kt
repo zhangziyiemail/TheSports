@@ -83,24 +83,26 @@ class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
 
     }
 
-    fun update(newData: List<LeagueEvent>?) {
-        val result = DiffUtil.calculateDiff(NewsListCacheDiffCall(newData, getAdapterData()), true)
+
+    fun update(leagueEvent: List<LeagueEvent>?) {
+        LogUtils.error("HomeViewPageFragment updata")
+        val result = DiffUtil.calculateDiff(NewsListCacheDiffCall(leagueEvent, getAdapterData()), true)
         if (mData == null) {
             mData = mutableListOf()
         }
-        mData?.addAll(newData ?: mutableListOf())
+        mData?.addAll(leagueEvent ?: mutableListOf())
         result.dispatchUpdatesTo(this)
     }
 
 }
 
 class NewsListCacheDiffCall(
-    private val newList: List<LeagueEvent>?,
-    private val oldList: List<LeagueEvent>?
-) : DiffUtil.Callback() {
+    private val newList : List<LeagueEvent>?,
+    private val oldList : List<LeagueEvent>? ):DiffUtil.Callback()
+{
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         if (newList.isNullOrEmpty() || oldList.isNullOrEmpty()) false
-        else newList[newItemPosition].idLeague == oldList[oldItemPosition].idLeague
+        else newList[newItemPosition].idEvent == oldList[oldItemPosition].idEvent
 
     override fun getOldListSize(): Int = oldList?.size ?: 0
 
@@ -111,4 +113,5 @@ class NewsListCacheDiffCall(
         else newList[newItemPosition] == oldList[oldItemPosition]
 
 }
+
 

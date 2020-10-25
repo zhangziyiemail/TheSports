@@ -1,8 +1,6 @@
 package com.example.github.thesports.http
 
-import com.example.github.thesports.entity.LeagueData
-import com.example.github.thesports.entity.LeagueEventData
-import com.example.github.thesports.entity.SportData
+import com.example.github.thesports.entity.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -30,6 +28,15 @@ interface ApiService {
      */
     @GET("api/v1/json/1/eventspastleague.php")
     suspend fun geteventspastleague(@Query("id") id: Long): LeagueEventData
+
+
+
+    /**
+     * event detail by Id
+     * https://www.thesportsdb.com/api/v1/json/1/lookupevent.php?id=441613
+     */
+    @GET("/api/v1/json/1/lookupevent.php")
+    suspend fun getlookupevent(@Query("id") id: Long): EventDetailData
 
 
 }

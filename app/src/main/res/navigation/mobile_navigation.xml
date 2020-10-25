@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_selectFragment"
             app:destination="@id/navigation_select" />
+        <action
+            android:id="@+id/action_homeviewpagefragment_to_eventdetailfragment"
+            app:destination="@id/navigation_event_detail_fragment" />
     </fragment>
 
     <fragment
@@ -26,6 +29,25 @@
         android:name="com.example.github.thesports.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+
+    <fragment
+        android:id="@+id/navigation_home_view_pager_fragment"
+        android:name="com.example.github.thesports.ui.home.HomeViewPageFragment"
+        android:label="title_homeviewpagerfragment"
+        tools:layout="@layout/fragment_home_page" >
+<!--        <action-->
+<!--            android:id="@+id/action_homeviewpagefragment_to_eventdetailfragment"-->
+<!--            app:destination="@id/navigation_event_detail_fragment" />-->
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_event_detail_fragment"
+        android:name="com.example.github.thesports.ui.eventdetail.EventDetailFragment"
+        android:label="event_detail_fragment"
+        tools:layout="@layout/fragment_event_detail" />
+
 
     <fragment
         android:id="@+id/navigation_select"

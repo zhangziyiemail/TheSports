@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.example.github.thesports.utils.LogUtils
 
 /**
  *   Created by Lee Zhang on 10/20/20 15:18
@@ -38,7 +39,8 @@ abstract class BaseRecyclerAdapter<T>(var mData: MutableList<T>?):
         setVariable(data, position, holder)
         holder.binding.executePendingBindings()// when data change , system will be refresh next frame. Using executePendingBindings() will be immediately
         holder.binding.root.setOnClickListener {
-                v -> itemListener?.onItemClick(position, v)}
+                v -> itemListener?.onItemClick(position, v)
+        }
         holder.binding.root.setOnLongClickListener { v ->
             itemLongClickListener?.onItemLongClick(position, v)
             false

@@ -31,12 +31,14 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
         }
     }
 
-    fun fatchLeagueEventWhithId(id: Int){
+    fun fatchLeagueEventWhithId(id: Int) {
         viewModelScope.safeLaunch {
-            block ={
+            block = {
                 val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
                 var alllest = mutableListOf<LeagueEvent>()
-                if ( MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague).isEmpty()){
+                if (MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague)
+                        .isEmpty()
+                ) {
                     val lastEventData = response.getNextEventData(leagueList[id].idLeague)
                     MyDatabaseUtils.leagueEventDao.insertLeagueList(lastEventData)
                     val nextEventData = response.getLastEventData(leagueList[id].idLeague)
@@ -44,15 +46,32 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
                     alllest.addAll(lastEventData)
                     alllest.addAll(nextEventData)
                     leagueEventLists.value = alllest
-                }else{
-                    leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague)
+                } else {
+                    leagueEventLists.value =
+                        MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague)
                 }
-
-
             }
-
         }
+    }
 
+    fun fatchEndLeagueEventWhithId(id: Int,mark :String) {
+        viewModelScope.safeLaunch {
+
+            block = {
+                val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
+                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(leagueList[id].strLeague,mark)
+            }
+        }
+    }
+
+    fun fatchNoStartLeagueEventWhithId(id: Int,mark :String) {
+        viewModelScope.safeLaunch {
+
+            block = {
+                val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
+                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(leagueList[id].strLeague,mark)
+            }
+        }
     }
 
 

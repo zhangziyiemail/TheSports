@@ -44,8 +44,9 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope b
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding?.lifecycleOwner = this
         initFragment(view, savedInstanceState)
+        mBinding?.lifecycleOwner = this
+
     }
 
     override fun onDestroy() {

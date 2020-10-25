@@ -60,4 +60,5 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
 
     fun <T : ViewModel> getViewModel(clazz: Class<T>): T = ViewModelProvider(this).get(clazz)
 
+
 }

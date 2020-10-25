@@ -5,9 +5,34 @@
     <item
         android:id="@+id/menu_search"
         android:orderInCategory="100"
+        android:icon="@mipmap/icon_search"
         android:title="search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/menu_all"
+        android:orderInCategory="100"
+        android:title="All event"
+        app:showAsAction="never"
+        />
 
+    <item
+        android:id="@+id/menu_ended"
+        android:orderInCategory="100"
+        android:title="Recently ended"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/menu_future"
+        android:orderInCategory="100"
+        android:title="Future begins"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/menu_sort"
+        android:orderInCategory="100"
+        android:title="Sort by time"
+        app:showAsAction="never"
+        />
 </menu>
