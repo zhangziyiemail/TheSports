@@ -12,7 +12,7 @@
             type="Boolean" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -30,8 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPink"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:menu="@menu/search_view"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:title="@string/app_name"
                 app:titleTextColor="@color/cardview_dark_background" />
 
@@ -39,6 +39,8 @@
 
 
         <FrameLayout
+            android:layout_below="@+id/al_bar"
+            android:layout_marginBottom="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -67,7 +69,18 @@
                 android:textSize="12sp"
                 android:visibility="@{netAvailable ? View.GONE : View.VISIBLE}" />
 
+
         </FrameLayout>
 
-    </LinearLayout>
+<!--        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+
+<!--            android:id="@+id/adView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            ads:adSize="BANNER"-->
+<!--            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"/>-->
+
+    </RelativeLayout>
 </layout>

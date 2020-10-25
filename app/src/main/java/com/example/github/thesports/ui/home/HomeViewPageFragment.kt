@@ -11,7 +11,10 @@ import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.base.OnItemClickListener
 import com.example.github.thesports.databinding.FragmentHomePageBinding
 import com.example.github.thesports.entity.LeagueEvent
+import com.example.github.thesports.utils.CalendarReminderUtils
 import com.example.github.thesports.utils.LogUtils
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
 
 /**
  *   Created by Lee Zhang on 10/22/20 23:10
@@ -37,6 +40,7 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
     override fun actionsOnViewInflate() {
         mViewModel.fatchLeagueEventWhithId(arguments?.getInt(LEAGUE_EVENT) ?: 0)
         mViewModel.leagueEventLists.observe(this, Observer {
+            LogUtils.error(it.toString())
             mAdapter.update(it)
             mData = it
         })
@@ -46,15 +50,26 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
         mBinding?.let { binding ->
             binding.adapter = mAdapter
             binding.itemClick = OnItemClickListener { position, view ->
-                var bundle = Bundle()
-                mAdapter.getItemData(position)?.idEvent?.toLong()?.let {
-                    bundle.putLong("event_id",it)
-                }
 
-                mNavController.navigate(
-                    R.id.action_homeviewpagefragment_to_eventdetailfragment,
-                    bundle
-                )
+                val itemData = mAdapter.getItemData(position)
+                if ("Match Finished".equals(itemData?.strStatus)){
+                    var bundle = Bundle()
+                    itemData?.idEvent?.toLong()?.let { bundle.putLong("event_id", it) }
+                    mNavController.navigate(
+                        R.id.action_homeviewpagefragment_to_eventdetailfragment,
+                        bundle
+                    )
+                }else{
+                    itemData?.let {
+                        //todo 添加提醒功能
+                        itemData->
+                        var bundle = Bundle()
+                        bundle.putString("event_click",itemData.strEvent)
+//                        Firebase.analytics.logEvent("event_click",bundle);
+//                         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z").parse(itemData.strTimestamp)).time
+//                        CalendarReminderUtils.addCalendarEvent(context,itemData.strEvent,itemData.strTime,time,0)
+                    }
+                }
             }
         }
         (activity as MainActivity).onViewClick ={
@@ -72,7 +87,7 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
                     state ="future"
                 }
                 R.id.menu_sort->LogUtils.error("HomeViewPageFragment sort")
-                R.id.menu_search->LogUtils.error("HomeViewPageFragment search")
+
             }
         }
     }

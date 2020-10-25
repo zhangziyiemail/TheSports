@@ -85,11 +85,14 @@ class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
 
 
     fun update(leagueEvent: List<LeagueEvent>?) {
-        LogUtils.error("HomeViewPageFragment updata")
+
         val result = DiffUtil.calculateDiff(NewsListCacheDiffCall(leagueEvent, getAdapterData()), true)
         if (mData == null) {
             mData = mutableListOf()
+        }else{
+            mData?.clear()
         }
+
         mData?.addAll(leagueEvent ?: mutableListOf())
         result.dispatchUpdatesTo(this)
     }

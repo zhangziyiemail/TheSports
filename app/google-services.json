@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1005929789492",
+    "firebase_url": "https://thesports-2020.firebaseio.com",
+    "project_id": "thesports-2020",
+    "storage_bucket": "thesports-2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005929789492:android:4d71ad938537e8761bf261",
+        "android_client_info": {
+          "package_name": "com.example.github.thesports"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005929789492-vpq0qa2tfcjrb4lbc66eht9r8dqbgr13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApPRq3ObP1YKHGB_4QAmLjdlRZtluboJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005929789492-vpq0qa2tfcjrb4lbc66eht9r8dqbgr13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

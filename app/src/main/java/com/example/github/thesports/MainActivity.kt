@@ -24,6 +24,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private var availableCount = 0
 
 
+
     private val manager: ConnectivityManager by lazy {
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
@@ -52,18 +53,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mBinding.netAvailable = availableCount > 0
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (::onViewClick.isInitialized)onViewClick.invoke(item.itemId) else LogUtils.error("onOptionsItemSelected")
-//        when(item.itemId){
-//            R.id.menu_all-> LogUtils.error("initFragment all")
-//            R.id.menu_ended->LogUtils.error("initFragment ended")
-//            R.id.menu_future->LogUtils.error("initFragment future")
-//            R.id.menu_sort->LogUtils.error("initFragment sort")
-//            R.id.menu_search->LogUtils.error("initFragment search")
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -76,10 +65,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         manager.registerNetworkCallback(request, netStateCallback)
 //
         toolbar.setOnMenuItemClickListener{
-
             if (::onViewClick.isInitialized)onViewClick.invoke(it.itemId) else LogUtils.error("onOptionsItemSelected")
             false
         }
+//        MobileAds.initialize(this) {}
+//
+//        val adRequest = AdRequest.Builder().build()
+//        adView.loadAd(adRequest)
+
     }
 
     override fun onBackPressed() {
