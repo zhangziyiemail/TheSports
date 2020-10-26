@@ -38,5 +38,12 @@ interface ApiService {
     @GET("/api/v1/json/1/lookupevent.php")
     suspend fun getlookupevent(@Query("id") id: Long): EventDetailData
 
+    /**
+     * search event by name
+     * https://www.thesportsdb.com/api/v1/json/1/searchevents.php?e=Arsenal_vs_Chelsea
+     */
+    @GET("/api/v1/json/1/searchevents.php")
+    suspend fun getSearchEvent(@Query("e") string: String):LeagueEData
+
 
 }

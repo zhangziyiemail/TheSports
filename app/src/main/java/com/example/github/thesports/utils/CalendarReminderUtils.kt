@@ -15,9 +15,9 @@ import java.util.*
  *   Created by Lee Zhang on 10/23/20 14:19
  **/
 object CalendarReminderUtils {
-    private const val CALENDER_URL = "com.example.github.thesports.utils/calender"
-    private const val CALENDER_EVENT_URL = "com.example.github.thesports.utils/events"
-    private const val CALENDER_REMINDER_URL = "com.example.github.thesports.utils/reminders"
+    private const val CALENDER_URL = "content://com.example.github.thesports.utils/calender"
+    private const val CALENDER_EVENT_URL = "content://com.example.github.thesports.utils/events"
+    private const val CALENDER_REMINDER_URL = "content://com.example.github.thesports.utils/reminders"
     private const val CALENDARS_NAME = "Event Remander"
     private const val CALENDARS_ACCOUNT_NAME = "TheSport"
     private const val CALENDARS_ACCOUNT_TYPE = "Sport"
@@ -68,7 +68,7 @@ object CalendarReminderUtils {
     /**
      * 添加日历账户，账户创建成功则返回账户id，否则返回-1
      */
-    private fun addCalendarAccount(context: Context,): Long {
+    private fun addCalendarAccount(context: Context): Long {
         val timeZone: TimeZone = TimeZone.getDefault()
         val value = ContentValues()
         value.put(CalendarContract.Calendars.NAME, CALENDARS_NAME)

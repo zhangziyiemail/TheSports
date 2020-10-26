@@ -4,16 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.example.github.thesports.MainActivity
+import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.databinding.FragmentEventDetailBinding
-import com.example.github.thesports.entity.EventDetail
-import com.example.github.thesports.ui.home.HomeListViewRepository
-import com.example.github.thesports.ui.home.HomeViewModeFactory
-import com.example.github.thesports.ui.home.HomeViewModel
-import com.example.github.thesports.utils.LogUtils
 
 /**
  *   Created by Lee Zhang on 10/24/20 16:24

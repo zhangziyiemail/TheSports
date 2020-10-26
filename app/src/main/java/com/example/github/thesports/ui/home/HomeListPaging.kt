@@ -1,22 +1,19 @@
 package com.example.github.thesports.ui.home
 
-import android.content.Context
-import android.text.TextUtils
+import android.os.Bundle
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseRecyclerAdapter
 import com.example.github.thesports.base.BaseViewHolder
-import com.example.github.thesports.base.DynamicFragmentStatePagerAdapter
+import com.example.github.thesports.data.MyDatabaseUtils
 import com.example.github.thesports.databinding.ItemHomePageBinding
+import com.example.github.thesports.databinding.ItemSearchviewBinding
 
 import com.example.github.thesports.entity.*
 import com.example.github.thesports.http.RetrofitManager
-import com.example.github.thesports.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,6 +22,9 @@ import kotlinx.coroutines.withContext
  **/
 class HomeListViewRepository{
 
+    suspend fun getEventData(strEvent: String): List<String> = withContext(Dispatchers.IO) {
+        MyDatabaseUtils.leagueEventDao.getLikeEvent(strEvent)
+    }
 
     suspend fun getNextEventData(id:Long): List<LeagueEvent> = withContext(Dispatchers.IO) {
         RetrofitManager.apiService.geteventsnextleague(id).events
@@ -35,32 +35,17 @@ class HomeListViewRepository{
     }
 }
 
+class CollectionAdapter(fragment: HomeFragment, var data:List<LeagueWithEvent>) : FragmentStateAdapter(fragment){
 
-class HomePagerAdapter(fm: FragmentManager,var data :List<LeagueWithEvent>): DynamicFragmentStatePagerAdapter<LeagueWithEvent>(fm){
+    override fun getItemCount(): Int = data.size
 
-    var mDatas=data
-
-    override fun getItem(position: Int): Fragment = HomeViewPageFragment.newInstance(position)
-
-    override fun getItemData(position: Int): LeagueWithEvent? {
-        return if(position<mDatas.size){
-            mDatas[position]
-        }else{
-            null
+    override fun createFragment(position: Int): Fragment {
+        val homeViewPageFragment = HomeViewPageFragment()
+        homeViewPageFragment.arguments = Bundle().apply {
+            putInt("event_id", position + 1)
         }
+        return homeViewPageFragment
     }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return mDatas[position].league.strLeague
-    }
-
-    override fun getCount(): Int = mDatas.size
-
-    override fun dataEquals(oldData: LeagueWithEvent?, newData: LeagueWithEvent?): Boolean =
-        TextUtils.equals(oldData?.league?.strLeague, newData?.league?.strLeague)
-
-    override fun getDataPosition(data: LeagueWithEvent?): Int = mDatas.indexOf(data)
-
 }
 
 class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
@@ -84,7 +69,7 @@ class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
     }
 
 
-    fun update(leagueEvent: List<LeagueEvent>?) {
+    fun update(leagueEvent: List<LeagueEvent>) {
 
         val result = DiffUtil.calculateDiff(NewsListCacheDiffCall(leagueEvent, getAdapterData()), true)
         if (mData == null) {
@@ -116,5 +101,46 @@ class NewsListCacheDiffCall(
         else newList[newItemPosition] == oldList[oldItemPosition]
 
 }
+
+class SearchaAdapter : BaseRecyclerAdapter<String>(null) {
+
+    override fun getLayoutId(viewType: Int): Int = R.layout.item_searchview
+
+    override fun setVariable(data: String, position: Int, holder: BaseViewHolder<ViewDataBinding>) {
+
+        (holder.binding as ItemSearchviewBinding).search = data
+    }
+
+    fun update(strEvent: List<String>?) {
+        val result = DiffUtil.calculateDiff(SearchaCacheDiffCall(strEvent, getAdapterData()), true)
+        if (mData == null) {
+            mData = mutableListOf()
+        } else {
+            mData?.clear()
+        }
+        mData?.addAll(strEvent ?: mutableListOf())
+        result.dispatchUpdatesTo(this)
+    }
+}
+
+
+class SearchaCacheDiffCall(
+    private val newList: List<String>?,
+    private val oldList: List<String>?
+) : DiffUtil.Callback() {
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        if (newList.isNullOrEmpty() || oldList.isNullOrEmpty()) false
+        else newList[newItemPosition] == oldList[oldItemPosition]
+
+    override fun getOldListSize(): Int = oldList?.size ?: 0
+
+    override fun getNewListSize(): Int = newList?.size ?: 0
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        if (newList.isNullOrEmpty() || oldList.isNullOrEmpty()) false
+        else newList[newItemPosition] == oldList[oldItemPosition]
+
+}
+
 
 

@@ -11,33 +11,32 @@ import kotlinx.android.parcel.Parcelize
 
 data class LeagueEventData(var events: MutableList<LeagueEvent>)
 
-
+data class LeagueEData(var event: MutableList<LeagueEvent>)
 @Parcelize
 @Entity(tableName = "LeagueEvent")
 data class LeagueEvent (
     @PrimaryKey
     val idEvent : String,
-    val strEvent : String,
-    val strFilename:String,
-    val strSport : String,
-    val idLeague :String,
-    val strLeague : String,
-    val strSeason : String,
-    val strHomeTeam : String,
-    val strAwayTeam: String,
-    val strTimestamp : String,
-    val dateEvent : String,
-    val strTime: String,
-    val strVenue : String,
-    val strCountry : String,
-    val strStatus :String,
-    val strPostponed :String,
-    val strLocked : String,
+    val strEvent : String?,
+    val strFilename:String?,
+    val strSport : String?,
+    val idLeague :String?,
+    val strLeague : String?,
+    val strSeason : String?,
+    val strHomeTeam : String?,
+    val strAwayTeam: String?,
+    val strTimestamp : String?,
+    val dateEvent : String?,
+    val strTime: String?,
+    val strVenue : String?,
+    val strCountry : String?,
+    val strStatus :String?,
+    val strPostponed :String?,
+    val strLocked : String?,
     val strThumb : String?,
     val intHomeScore : String?,
     val intAwayScore : String?,
-    val idHomeTeam : String,
-    val idAwayTeam :String,
+    val idHomeTeam : String?,
+    val idAwayTeam :String?,
     val noti :Boolean = false
-
 ) : Parcelable

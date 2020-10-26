@@ -63,4 +63,6 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope b
 
     fun <T : ViewModel> getSharedViewModel(clazz: Class<T>): T =
         ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(clazz)
+
+
 }

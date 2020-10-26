@@ -8,6 +8,7 @@ import com.example.github.thesports.entity.*
  **/
 @Dao
 interface SportDao {
+
     @Query("select * from Sport")
     suspend fun getSportList(): List<Sport>
 
@@ -20,9 +21,6 @@ interface SportDao {
     @Transaction
     @Query("SELECT * FROM Sport")
     suspend fun getSportWithLeague(): List<SportWithLeagueList>
-
-
-
 
 }
 
@@ -46,6 +44,8 @@ interface LeagueDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLeague(league: League)
+
+
 }
 
 @Dao
@@ -60,6 +60,8 @@ interface LeagueEventDao{
     @Query("select * from LeagueEvent where strLeague =:strleague and strStatus =:mark")
     suspend fun getEndedLeagueList(strleague : String,mark: String):List<LeagueEvent>
 
+    @Query("select strEvent from LeagueEvent where strEvent like '%'|| :event || '%'")
+    suspend fun getLikeEvent(event: String): List<String>
 
     @Transaction
     @Query("SELECT * FROM League where follow =:isFollow")

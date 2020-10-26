@@ -1,7 +1,11 @@
 package com.example.github.thesports.base
 
+import android.content.Context
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.github.thesports.utils.LogUtils
 
 /**
@@ -15,4 +19,13 @@ fun bindRecyclerItemClick(recyclerView: RecyclerView, listener: OnItemClickListe
     if (adapter == null || adapter !is BaseRecyclerAdapter<*>) return
     adapter.setOnItemListener(listener)
 }
+
+
+
+@BindingAdapter("bind:refreshlistener")
+fun bindRefreshfLisener(swipeRefreshLayout: SwipeRefreshLayout, listener: SwipeRefreshLayout.OnRefreshListener) {
+    return swipeRefreshLayout.setOnRefreshListener(listener)
+}
+
+
 

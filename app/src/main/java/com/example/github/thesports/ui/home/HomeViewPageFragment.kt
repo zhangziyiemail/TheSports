@@ -2,18 +2,16 @@ package com.example.github.thesports.ui.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.github.thesports.MainActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.base.OnItemClickListener
 import com.example.github.thesports.databinding.FragmentHomePageBinding
 import com.example.github.thesports.entity.LeagueEvent
-import com.example.github.thesports.utils.CalendarReminderUtils
 import com.example.github.thesports.utils.LogUtils
-import java.text.ParsePosition
 import java.text.SimpleDateFormat
 
 /**
@@ -24,6 +22,8 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
     private var state = "all"
 
     lateinit var mData: List<LeagueEvent>
+
+    var leagueEvent: Int = 0
 
     private val mViewModel by lazy {
         ViewModelProvider(requireActivity(), HomeViewModeFactory(HomeListViewRepository())).get(
@@ -37,72 +37,91 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
 
     override fun getLayoutId(): Int = R.layout.fragment_home_page
 
+
+
     override fun actionsOnViewInflate() {
-        mViewModel.fatchLeagueEventWhithId(arguments?.getInt(LEAGUE_EVENT) ?: 0)
+        (activity as MainActivity).showLoading()
+
         mViewModel.leagueEventLists.observe(this, Observer {
-            LogUtils.error(it.toString())
             mAdapter.update(it)
             mData = it
+            (activity as MainActivity).dismissLoading()
         })
     }
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
+        arguments?.takeIf { it.containsKey("event_id") }?.apply {
+            leagueEvent = getInt("event_id")-1
+            mViewModel.fatchLeagueEventWhithId(leagueEvent)
+        }
         mBinding?.let { binding ->
             binding.adapter = mAdapter
             binding.itemClick = OnItemClickListener { position, view ->
-
                 val itemData = mAdapter.getItemData(position)
-                if ("Match Finished".equals(itemData?.strStatus)){
+                if ("Match Finished".equals(itemData?.strStatus)) {
                     var bundle = Bundle()
                     itemData?.idEvent?.toLong()?.let { bundle.putLong("event_id", it) }
                     mNavController.navigate(
                         R.id.action_homeviewpagefragment_to_eventdetailfragment,
                         bundle
                     )
-                }else{
+                } else {
                     itemData?.let {
                         //todo 添加提醒功能
-                        itemData->
+                            itemData ->
                         var bundle = Bundle()
-                        bundle.putString("event_click",itemData.strEvent)
-//                        Firebase.analytics.logEvent("event_click",bundle);
-//                         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z").parse(itemData.strTimestamp)).time
-//                        CalendarReminderUtils.addCalendarEvent(context,itemData.strEvent,itemData.strTime,time,0)
+                        bundle.putString("event_click", itemData.strEvent)
+
+                        val parse =
+                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(itemData.dateEvent + " " + itemData.strTime)
+
+                        (activity as MainActivity).firebaseAnalytics
+                            .setUserProperty("noti_event", itemData.strEvent)
+
+//                        CalendarReminderUtils.addCalendarEvent(
+//                            context,
+//                            itemData.strEvent,
+//                            itemData.strTime,
+//                            parse.time,
+//                            0
+//                        )
                     }
                 }
             }
+
+            binding.refersh = SwipeRefreshLayout.OnRefreshListener {
+                LogUtils.error(".OnRefreshListener "+leagueEvent)
+                mViewModel.fatchLeagueEventWhithIdFromInternet(leagueEvent)
+                binding.srlEventlist.isRefreshing = false
+            }
         }
-        (activity as MainActivity).onViewClick ={
-            when(it){
-                R.id.menu_all->{
-                    if(state != "all") mViewModel.fatchLeagueEventWhithId(arguments?.getInt(LEAGUE_EVENT) ?: 0)
-                    state ="all"
+        (activity as MainActivity).onViewClick = {
+            when (it) {
+                R.id.menu_all -> {
+                    if (state != "all") mViewModel.fatchLeagueEventWhithId(
+                        leagueEvent
+                    )
+                    state = "all"
                 }
-                R.id.menu_ended->{
-                    if(state != "ended")mViewModel.fatchEndLeagueEventWhithId(arguments?.getInt(LEAGUE_EVENT) ?: 0,"Match Finished")
-                    state ="ended"
+                R.id.menu_ended -> {
+                    if (state != "ended") mViewModel.fatchEndLeagueEventWhithId(
+                        leagueEvent, "Match Finished"
+                    )
+                    state = "ended"
                 }
-                R.id.menu_future->{
-                    if(state != "future")mViewModel.fatchEndLeagueEventWhithId(arguments?.getInt(LEAGUE_EVENT) ?: 0,"Not Started")
-                    state ="future"
+                R.id.menu_future -> {
+                    if (state != "future") mViewModel.fatchEndLeagueEventWhithId(
+                        leagueEvent, "Not Started"
+                    )
+                    state = "future"
                 }
-                R.id.menu_sort->LogUtils.error("HomeViewPageFragment sort")
+                R.id.menu_sort -> mViewModel.fatchSortData()
+
+                R.id.menu_sport -> mNavController.navigate(R.id.action_homeFragment_to_selectFragment)
 
             }
         }
     }
 
-    companion object {
-        private const val LEAGUE_EVENT = "league_event"
-
-        @JvmStatic
-        fun newInstance(sectionNumber: Int): HomeViewPageFragment {
-            return HomeViewPageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(LEAGUE_EVENT, sectionNumber)
-                }
-            }
-        }
-    }
 
 }

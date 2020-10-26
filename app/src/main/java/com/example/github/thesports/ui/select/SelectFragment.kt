@@ -1,20 +1,14 @@
 package com.example.github.thesports.ui.select
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.github.thesports.MainActivity
+import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.databinding.FragmentSelectBinding
-import com.example.github.thesports.utils.LogUtils
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_select.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**

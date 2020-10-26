@@ -35,4 +35,11 @@
         android:title="Sort by time"
         app:showAsAction="never"
         />
+
+    <item
+        android:id="@+id/menu_sport"
+        android:orderInCategory="100"
+        android:title="Choose a league"
+        app:showAsAction="never"
+        />
 </menu>

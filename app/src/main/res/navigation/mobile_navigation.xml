@@ -9,18 +9,21 @@
         android:id="@+id/navigation_home"
         android:name="com.example.github.thesports.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_selectFragment"
             app:destination="@id/navigation_select" />
         <action
             android:id="@+id/action_homeviewpagefragment_to_eventdetailfragment"
             app:destination="@id/navigation_event_detail_fragment" />
+        <action
+            android:id="@+id/action_homeviewpagefragment_to_searchlistfragment"
+            app:destination="@id/navigation_search_list" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.github.thesports.ui.dashboard.DashboardFragment"
+        android:name="com.example.github.thesports.ui.searchlist.SearchListFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
@@ -30,15 +33,21 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
+    <fragment
+        android:id="@+id/navigation_search_list"
+        android:name="com.example.github.thesports.ui.searchlist.SearchListFragment"
+        android:label="title_search_list"
+        tools:layout="@layout/fragment_search_list" />
+
 
     <fragment
         android:id="@+id/navigation_home_view_pager_fragment"
         android:name="com.example.github.thesports.ui.home.HomeViewPageFragment"
         android:label="title_homeviewpagerfragment"
-        tools:layout="@layout/fragment_home_page" >
-<!--        <action-->
-<!--            android:id="@+id/action_homeviewpagefragment_to_eventdetailfragment"-->
-<!--            app:destination="@id/navigation_event_detail_fragment" />-->
+        tools:layout="@layout/fragment_home_page">
+        <!--        <action-->
+        <!--            android:id="@+id/action_homeviewpagefragment_to_eventdetailfragment"-->
+        <!--            app:destination="@id/navigation_event_detail_fragment" />-->
     </fragment>
 
 
@@ -53,7 +62,7 @@
         android:id="@+id/navigation_select"
         android:name="com.example.github.thesports.ui.select.SelectFragment"
         android:label="@string/title_select"
-        tools:layout="@layout/fragment_select" >
+        tools:layout="@layout/fragment_select">
         <action
             android:id="@+id/action_selectFragment_to_homeFragment"
             app:destination="@id/navigation_home" />

@@ -66,18 +66,10 @@ class SelectPageAdapter : BaseRecyclerAdapter<SportWithLeagueList>(null) {
             chip.setOnClickListener(View.OnClickListener {
                 if (!(it as Chip).isChecked) {
                     GlobalScope.launch {
-//                        MyDatabaseUtils.myLeaguesDao.deleteByUserId(league.idLeague)
                         MyDatabaseUtils.leagueDao.setfollow(league.idLeague, false)
                     }
                 } else {
                     GlobalScope.launch {
-//                        MyDatabaseUtils.myLeaguesDao.insertLeague(
-//                            MyLeagues(
-//                                league.idLeague,
-//                                league.strSport,
-//                                league.strLeague
-//                            )
-//                        )
                         MyDatabaseUtils.leagueDao.setfollow(league.idLeague, true)
                     }
                 }
