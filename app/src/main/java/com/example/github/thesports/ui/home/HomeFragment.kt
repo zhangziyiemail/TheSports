@@ -2,8 +2,10 @@ package com.example.github.thesports.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.base.OnItemClickListener
@@ -20,6 +22,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     lateinit var mData: List<LeagueWithEvent>
     private lateinit var mAdapter: CollectionAdapter
     var searchData = arrayListOf<String>()
+    private lateinit var collectionPagerAdapter: CollectionPagerAdapter
 
     private val mViewModel by lazy {
         ViewModelProvider(requireActivity(), HomeViewModeFactory(HomeListViewRepository())).get(
@@ -49,8 +52,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         mBinding?.let { binding ->
             binding.adapter = mSearchAdapter
             binding.itemClick = OnItemClickListener { position, view ->
+                val tv_search = view.findViewById<TextView>(R.id.tv_title)
                 val bundle = Bundle()
-                bundle.putString("str_event",searchData[position])
+                bundle.putString("str_event",tv_search.text.toString())
                 mNavController.navigate(R.id.action_homeviewpagefragment_to_searchlistfragment,bundle)
 
             }
@@ -80,11 +84,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     fun registerViewmodel() {
         mViewModel.leagueWithEventList.observe(this, Observer {
             mData = it
-            mAdapter = CollectionAdapter(this, it)
-            view_pager.adapter = mAdapter
-            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
-                tab.text = mData[position].league.strLeague
-            }.attach()
+            collectionPagerAdapter = CollectionPagerAdapter(childFragmentManager,it)
+            view_pager.adapter = collectionPagerAdapter
+            view_pager.offscreenPageLimit = 1
+            tl_leagues.setupWithViewPager(view_pager)
+                        (view_pager as RecyclerView).recycledViewPool.setMaxRecycledViews(R.layout.item_home_page,0)
+//            mAdapter = CollectionAdapter(this, it)
+//            view_pager.adapter = mAdapter
+//
+//            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
+//                tab.text = mData[position].league.strLeague
+//            }.attach()
         })
     }
 

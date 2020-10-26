@@ -28,7 +28,7 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
                     MyDatabaseUtils.leagueEventDao.getFollowLeagueWithEvent(true)
             }
             onError = {
-                LogUtils.error(it.message)
+                LogUtils.error(it.stackTraceToString())
             }
         }
     }

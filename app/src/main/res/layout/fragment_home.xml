@@ -33,12 +33,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tabMode="scrollable" />
 
-        <androidx.viewpager2.widget.ViewPager2
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tl_leagues" />
+<!--                <androidx.viewpager2.widget.ViewPager2-->
+<!--                    android:id="@+id/view_pager"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tl_leagues" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"

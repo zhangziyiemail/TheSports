@@ -3,6 +3,8 @@ package com.example.github.thesports.ui.home
 import android.os.Bundle
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.github.thesports.R
@@ -14,8 +16,10 @@ import com.example.github.thesports.databinding.ItemSearchviewBinding
 
 import com.example.github.thesports.entity.*
 import com.example.github.thesports.http.RetrofitManager
+import com.example.github.thesports.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 /**
  *   Created by Lee Zhang on 10/22/20 17:23
@@ -37,7 +41,9 @@ class HomeListViewRepository{
 
 class CollectionAdapter(fragment: HomeFragment, var data:List<LeagueWithEvent>) : FragmentStateAdapter(fragment){
 
+    private val pageIds= data.map { it.hashCode().toLong() }
     override fun getItemCount(): Int = data.size
+
 
     override fun createFragment(position: Int): Fragment {
         val homeViewPageFragment = HomeViewPageFragment()
@@ -46,6 +52,36 @@ class CollectionAdapter(fragment: HomeFragment, var data:List<LeagueWithEvent>) 
         }
         return homeViewPageFragment
     }
+
+    override fun getItemId(position: Int): Long {
+//        LogUtils.error("data[position].hashCode().toLong()+"+data[position].hashCode().toLong())
+        return data[position].hashCode().toLong()
+    }
+    override fun containsItem(itemId: Long): Boolean {
+        return pageIds.contains(itemId)
+    }
+
+}
+
+
+class CollectionPagerAdapter(fm: FragmentManager, var data:List<LeagueWithEvent>):
+    FragmentStatePagerAdapter(fm){
+
+    override fun getCount(): Int  = data.size
+
+    override fun getItem(i: Int): Fragment {
+        val fragment = HomeViewPageFragment()
+        fragment.arguments = Bundle().apply {
+            LogUtils.error("CollectionPagerAdapter "+i)
+            putInt("event_id", i + 1)
+        }
+        return fragment
+    }
+
+    override fun getPageTitle(position: Int): CharSequence {
+        return data[position].league.strLeague
+    }
+
 }
 
 class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){

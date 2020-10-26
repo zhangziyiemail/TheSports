@@ -8,12 +8,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.base.OnItemClickListener
+import com.example.github.thesports.data.MyDatabaseUtils
 import com.example.github.thesports.databinding.FragmentSearchListBinding
 import com.example.github.thesports.entity.EventDetail
 import com.example.github.thesports.entity.LeagueEvent
 import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.ui.home.HomePageAdapter
 import com.example.github.thesports.utils.LogUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SearchListFragment : BaseFragment<FragmentSearchListBinding>() {
     override fun getLayoutId(): Int = R.layout.fragment_search_list
@@ -49,7 +52,19 @@ class SearchListFragment : BaseFragment<FragmentSearchListBinding>() {
             binding.adapter = mAdapter
             binding.itemClick = OnItemClickListener { position, view ->
                 val itemData = mAdapter.getItemData(position)
+                GlobalScope.launch {
+                    if (itemData != null) {
+                        MyDatabaseUtils.leagueEventDao.insertLeague(itemData)
+                    }
+                }
+                val bundle = Bundle()
+                if (itemData != null) {
+                    bundle.putString("event_id",itemData.idEvent)
+                }
+                mNavController.navigate(R.id.action_selectfragment_to_eventdetailfragment,bundle)
             }
         }
     }
 }
+
+

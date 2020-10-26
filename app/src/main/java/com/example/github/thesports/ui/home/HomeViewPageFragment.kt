@@ -12,6 +12,7 @@ import com.example.github.thesports.base.OnItemClickListener
 import com.example.github.thesports.databinding.FragmentHomePageBinding
 import com.example.github.thesports.entity.LeagueEvent
 import com.example.github.thesports.utils.LogUtils
+import kotlinx.android.synthetic.main.fragment_home_page.*
 import java.text.SimpleDateFormat
 
 /**
@@ -41,17 +42,20 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
 
     override fun actionsOnViewInflate() {
         (activity as MainActivity).showLoading()
-
         mViewModel.leagueEventLists.observe(this, Observer {
             mAdapter.update(it)
             mData = it
             (activity as MainActivity).dismissLoading()
+//            mViewModel.leagueEventLists.removeObservers(this)
         })
+
     }
+    
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         arguments?.takeIf { it.containsKey("event_id") }?.apply {
             leagueEvent = getInt("event_id")-1
+            LogUtils.error("CollectionPagerAdapter "+leagueEvent)
             mViewModel.fatchLeagueEventWhithId(leagueEvent)
         }
         mBinding?.let { binding ->

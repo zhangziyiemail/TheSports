@@ -31,13 +31,13 @@ interface LeagueDao {
     suspend fun getLeagueList(): List<League>
 
     @Query("select * from League where follow =:isFollow")
-    suspend fun getFollowLeagueList(isFollow : Boolean): List<League>
+    suspend fun getFollowLeagueList(isFollow: Boolean): List<League>
 
     @Query("select * from League where strSport = :sport")
     suspend fun getLeagueOfSprotList(sport: String): List<League>
 
     @Query("update League set follow = :follow where  idLeague = :idLeague")
-    suspend fun setfollow(idLeague: Long, follow : Boolean)
+    suspend fun setfollow(idLeague: Long, follow: Boolean)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLeagueList(league: List<League>)
@@ -49,23 +49,26 @@ interface LeagueDao {
 }
 
 @Dao
-interface LeagueEventDao{
+interface LeagueEventDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLeagueList(league: List<LeagueEvent>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLeague(league: LeagueEvent)
+
     @Query("select * from LeagueEvent where strLeague =:strleague")
-    suspend fun getLeagueList(strleague : String):List<LeagueEvent>
+    suspend fun getLeagueList(strleague: String): List<LeagueEvent>
 
     @Query("select * from LeagueEvent where strLeague =:strleague and strStatus =:mark")
-    suspend fun getEndedLeagueList(strleague : String,mark: String):List<LeagueEvent>
+    suspend fun getEndedLeagueList(strleague: String, mark: String): List<LeagueEvent>
 
     @Query("select strEvent from LeagueEvent where strEvent like '%'|| :event || '%'")
     suspend fun getLikeEvent(event: String): List<String>
 
     @Transaction
     @Query("SELECT * FROM League where follow =:isFollow")
-    suspend fun getFollowLeagueWithEvent(isFollow : Boolean): List<LeagueWithEvent>
+    suspend fun getFollowLeagueWithEvent(isFollow: Boolean): List<LeagueWithEvent>
 }
 
 
