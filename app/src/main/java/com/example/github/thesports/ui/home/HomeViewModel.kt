@@ -8,12 +8,12 @@ import com.example.github.thesports.data.MyDatabaseUtils
 import com.example.github.thesports.entity.LeagueEvent
 import com.example.github.thesports.entity.LeagueWithEvent
 import com.example.github.thesports.utils.LogUtils
-import com.example.github.thesports.widget.CustomDialog
 import java.text.SimpleDateFormat
 
 class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() {
     var leagueWithEventList = MutableLiveData<List<LeagueWithEvent>>()
     var leagueEventLists = MutableLiveData<List<LeagueEvent>>()
+    var allEventCallback = mutableListOf<LeagueEvent>()
 
     //    List<FollowSportWithLeagueList>
     fun fatchLeagueEventList() {
@@ -56,36 +56,66 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
         }
     }
 
-    fun fatchEndLeagueEventWhithId(id: Int,mark :String) {
+
+//    fun fatchLeagueEventWhithIdCallback(id: Int): List<LeagueEvent> {
+//
+//        viewModelScope.safeLaunch {
+//            block = {
+//                val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
+//                if (MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague)
+//                        .isEmpty()
+//                ) {
+//                    val lastEventData = response.getNextEventData(leagueList[id].idLeague)
+//                    MyDatabaseUtils.leagueEventDao.insertLeagueList(lastEventData)
+//                    val nextEventData = response.getLastEventData(leagueList[id].idLeague)
+//                    MyDatabaseUtils.leagueEventDao.insertLeagueList(nextEventData)
+//                    allEventCallback.addAll(lastEventData)
+//                    allEventCallback.addAll(nextEventData)
+//                } else {
+//                    allEventCallback.addAll(MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague))
+//                }
+//            }
+//        }
+//        LogUtils.error("CollectionPagerAdapter " + allEventCallback.toString())
+//        return allEventCallback
+//    }
+
+    fun fatchEndLeagueEventWhithId(id: Int, mark: String) {
         viewModelScope.safeLaunch {
 
             block = {
                 val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
-                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(leagueList[id].strLeague,mark)
+                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(
+                    leagueList[id].strLeague,
+                    mark
+                )
             }
         }
     }
 
-    fun fatchNoStartLeagueEventWhithId(id: Int,mark :String) {
+    fun fatchNoStartLeagueEventWhithId(id: Int, mark: String) {
         viewModelScope.safeLaunch {
 
             block = {
                 val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
-                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(leagueList[id].strLeague,mark)
+                leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(
+                    leagueList[id].strLeague,
+                    mark
+                )
             }
         }
     }
 
-    fun fatchSortData(){
+    fun fatchSortData() {
 
         leagueEventLists.value = leagueEventLists?.let {
             it.value?.sortedBy {
-                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.dateEvent+" "+it.strTime).time
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.dateEvent + " " + it.strTime).time
             }
         }
     }
 
-    fun fatchLeagueEventWhithIdFromInternet(id: Int){
+    fun fatchLeagueEventWhithIdFromInternet(id: Int) {
 
         var alllest = mutableListOf<LeagueEvent>()
         viewModelScope.safeLaunch {
@@ -109,10 +139,10 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
 
     var likeSearchList = MutableLiveData<List<String>>()
 
-    fun fatchLikeSearchView(strevent: String){
+    fun fatchLikeSearchView(strevent: String) {
         viewModelScope.safeLaunch {
-            block ={
-                likeSearchList.value  = response.getEventData(strevent)
+            block = {
+                likeSearchList.value = response.getEventData(strevent)
             }
         }
     }

@@ -2,17 +2,17 @@ package com.example.github.thesports.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.R
 import com.example.github.thesports.base.BaseFragment
 import com.example.github.thesports.base.OnItemClickListener
 import com.example.github.thesports.databinding.FragmentHomePageBinding
 import com.example.github.thesports.entity.LeagueEvent
+import com.example.github.thesports.ui.activity.MainActivity
 import com.example.github.thesports.utils.LogUtils
-import kotlinx.android.synthetic.main.fragment_home_page.*
 import java.text.SimpleDateFormat
 
 /**
@@ -39,24 +39,23 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
     override fun getLayoutId(): Int = R.layout.fragment_home_page
 
 
-
     override fun actionsOnViewInflate() {
         (activity as MainActivity).showLoading()
         mViewModel.leagueEventLists.observe(this, Observer {
-            mAdapter.update(it)
+           mAdapter.update(it)
             mData = it
             (activity as MainActivity).dismissLoading()
 //            mViewModel.leagueEventLists.removeObservers(this)
         })
 
     }
-    
+
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         arguments?.takeIf { it.containsKey("event_id") }?.apply {
-            leagueEvent = getInt("event_id")-1
-            LogUtils.error("CollectionPagerAdapter "+leagueEvent)
-            mViewModel.fatchLeagueEventWhithId(leagueEvent)
+            leagueEvent = getInt("event_id") - 1
+//            LogUtils.error("CollectionPagerAdapter " + mViewModel.fatchLeagueEventWhithIdCallback(leagueEvent).toString())
+           mViewModel.fatchLeagueEventWhithId(leagueEvent)
         }
         mBinding?.let { binding ->
             binding.adapter = mAdapter
@@ -82,6 +81,8 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
                         (activity as MainActivity).firebaseAnalytics
                             .setUserProperty("noti_event", itemData.strEvent)
 
+                        view.findViewById<ImageView>(R.id.iv_icon_noti)
+                            .setImageResource(R.mipmap.icon_bell)
 //                        CalendarReminderUtils.addCalendarEvent(
 //                            context,
 //                            itemData.strEvent,
@@ -94,7 +95,7 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
             }
 
             binding.refersh = SwipeRefreshLayout.OnRefreshListener {
-                LogUtils.error(".OnRefreshListener "+leagueEvent)
+                LogUtils.error(".OnRefreshListener " + leagueEvent)
                 mViewModel.fatchLeagueEventWhithIdFromInternet(leagueEvent)
                 binding.srlEventlist.isRefreshing = false
             }

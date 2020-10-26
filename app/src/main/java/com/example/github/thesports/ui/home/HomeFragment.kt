@@ -84,17 +84,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     fun registerViewmodel() {
         mViewModel.leagueWithEventList.observe(this, Observer {
             mData = it
-            collectionPagerAdapter = CollectionPagerAdapter(childFragmentManager,it)
-            view_pager.adapter = collectionPagerAdapter
-            view_pager.offscreenPageLimit = 1
-            tl_leagues.setupWithViewPager(view_pager)
-                        (view_pager as RecyclerView).recycledViewPool.setMaxRecycledViews(R.layout.item_home_page,0)
-//            mAdapter = CollectionAdapter(this, it)
-//            view_pager.adapter = mAdapter
-//
-//            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
-//                tab.text = mData[position].league.strLeague
-//            }.attach()
+//            collectionPagerAdapter = CollectionPagerAdapter(childFragmentManager,it)
+//            view_pager.adapter = collectionPagerAdapter
+//            view_pager.offscreenPageLimit = mData.size
+//            tl_leagues.setupWithViewPager(view_pager)
+//                        (view_pager as RecyclerView).recycledViewPool.setMaxRecycledViews(R.layout.item_home_page,0)
+            mAdapter = CollectionAdapter(this, it)
+            view_pager.adapter = mAdapter
+            view_pager.offscreenPageLimit = mData.size
+            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
+                tab.text = mData[position].league.strLeague
+            }.attach()
         })
     }
 
