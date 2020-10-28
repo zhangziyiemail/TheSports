@@ -34,7 +34,6 @@ class CustomDialog protected constructor(context: Context, theme: Int, string: S
             context, R.anim.loading_animation
         )
         ivLoading.startAnimation(hyperspaceJumpAnimation)
-
         window!!.attributes.gravity = Gravity.CENTER
         window!!.attributes.dimAmount = 0.5f
     }

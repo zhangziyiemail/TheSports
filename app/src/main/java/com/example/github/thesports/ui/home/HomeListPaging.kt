@@ -61,6 +61,9 @@ class CollectionAdapter(fragment: HomeFragment, var data:List<LeagueWithEvent>) 
         return pageIds.contains(itemId)
     }
 
+
+
+
 }
 
 
@@ -81,7 +84,6 @@ class CollectionPagerAdapter(fm: FragmentManager, var data:List<LeagueWithEvent>
     override fun getPageTitle(position: Int): CharSequence {
         return data[position].league.strLeague
     }
-
 }
 
 class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
@@ -106,18 +108,15 @@ class HomePageAdapter : BaseRecyclerAdapter<LeagueEvent>(null){
 
 
     fun update(leagueEvent: List<LeagueEvent>) {
-
         val result = DiffUtil.calculateDiff(NewsListCacheDiffCall(leagueEvent, getAdapterData()), true)
         if (mData == null) {
             mData = mutableListOf()
         }else{
             mData?.clear()
         }
-
         mData?.addAll(leagueEvent ?: mutableListOf())
         result.dispatchUpdatesTo(this)
     }
-
 }
 
 class NewsListCacheDiffCall(
@@ -134,7 +133,7 @@ class NewsListCacheDiffCall(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         if (newList.isNullOrEmpty() || oldList.isNullOrEmpty()) false
-        else newList[newItemPosition] == oldList[oldItemPosition]
+        else newList[newItemPosition].idEvent == oldList[oldItemPosition].idEvent
 
 }
 
@@ -175,7 +174,6 @@ class SearchaCacheDiffCall(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         if (newList.isNullOrEmpty() || oldList.isNullOrEmpty()) false
         else newList[newItemPosition] == oldList[oldItemPosition]
-
 }
 
 

@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat
 class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() {
     var leagueWithEventList = MutableLiveData<List<LeagueWithEvent>>()
     var leagueEventLists = MutableLiveData<List<LeagueEvent>>()
-    var allEventCallback = mutableListOf<LeagueEvent>()
 
     //    List<FollowSportWithLeagueList>
     fun fatchLeagueEventList() {
@@ -56,33 +55,9 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
         }
     }
 
-
-//    fun fatchLeagueEventWhithIdCallback(id: Int): List<LeagueEvent> {
-//
-//        viewModelScope.safeLaunch {
-//            block = {
-//                val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
-//                if (MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague)
-//                        .isEmpty()
-//                ) {
-//                    val lastEventData = response.getNextEventData(leagueList[id].idLeague)
-//                    MyDatabaseUtils.leagueEventDao.insertLeagueList(lastEventData)
-//                    val nextEventData = response.getLastEventData(leagueList[id].idLeague)
-//                    MyDatabaseUtils.leagueEventDao.insertLeagueList(nextEventData)
-//                    allEventCallback.addAll(lastEventData)
-//                    allEventCallback.addAll(nextEventData)
-//                } else {
-//                    allEventCallback.addAll(MyDatabaseUtils.leagueEventDao.getLeagueList(leagueList[id].strLeague))
-//                }
-//            }
-//        }
-//        LogUtils.error("CollectionPagerAdapter " + allEventCallback.toString())
-//        return allEventCallback
-//    }
-
     fun fatchEndLeagueEventWhithId(id: Int, mark: String) {
+        LogUtils.error("fatchEndLeagueEventWhithId "+id)
         viewModelScope.safeLaunch {
-
             block = {
                 val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
                 leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(
@@ -90,12 +65,14 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
                     mark
                 )
             }
+            onError ={
+                LogUtils.error(it.fillInStackTrace())
+            }
         }
     }
 
     fun fatchNoStartLeagueEventWhithId(id: Int, mark: String) {
         viewModelScope.safeLaunch {
-
             block = {
                 val leagueList = MyDatabaseUtils.leagueDao.getFollowLeagueList(true)
                 leagueEventLists.value = MyDatabaseUtils.leagueEventDao.getEndedLeagueList(
@@ -107,7 +84,6 @@ class HomeViewModel(private val response: HomeListViewRepository) : ViewModel() 
     }
 
     fun fatchSortData() {
-
         leagueEventLists.value = leagueEventLists?.let {
             it.value?.sortedBy {
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.dateEvent + " " + it.strTime).time

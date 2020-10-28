@@ -24,7 +24,7 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
 //    }
 
     private val mViewModel by lazy {
-        ViewModelProvider(requireActivity(), SelectViewModeFactory(SelectListViewRepository())).get(
+        ViewModelProvider(this, SelectViewModeFactory(SelectListViewRepository())).get(
             SelectViewModel::class.java
         )
     }
@@ -33,18 +33,18 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
         SelectPageAdapter()
     }
 
-
-
     override fun getLayoutId(): Int = R.layout.fragment_select
 
 
     override fun actionsOnViewInflate() {
         mViewModel.fatchSproutAndLeague()
+        (activity as MainActivity).showLoading()
         mViewModel.sportWithLeague.observe(this, Observer {
             mAdapter.update(it)
             it.forEach(){
                 sportList.add(it.sprot.strSport)
             }
+            (activity as MainActivity).dismissLoading()
         })
 
     }
@@ -56,7 +56,7 @@ class SelectFragment : BaseFragment<FragmentSelectBinding>() {
         }
         fab.setOnClickListener {
             mNavController.navigate(R.id.action_selectFragment_to_homeFragment)
+            mAdapter.notifyDataSetChanged()
         }
     }
-
 }

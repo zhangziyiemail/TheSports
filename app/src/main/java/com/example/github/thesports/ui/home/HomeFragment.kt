@@ -12,20 +12,18 @@ import com.example.github.thesports.base.OnItemClickListener
 import com.example.github.thesports.databinding.FragmentHomeBinding
 import com.example.github.thesports.entity.LeagueWithEvent
 import com.example.github.thesports.ui.activity.MainActivity
-import com.example.github.thesports.utils.LogUtils
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
-
+    private var state = "all"
     override fun getLayoutId(): Int = R.layout.fragment_home
     lateinit var mData: List<LeagueWithEvent>
     private lateinit var mAdapter: CollectionAdapter
     var searchData = arrayListOf<String>()
-    private lateinit var collectionPagerAdapter: CollectionPagerAdapter
+
 
     private val mViewModel by lazy {
-        ViewModelProvider(requireActivity(), HomeViewModeFactory(HomeListViewRepository())).get(
+        ViewModelProvider(this, HomeViewModeFactory(HomeListViewRepository())).get(
             HomeViewModel::class.java
         )
     }
@@ -46,16 +44,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
-
         (activity as MainActivity).showToolBar(true)
-
         mBinding?.let { binding ->
             binding.adapter = mSearchAdapter
             binding.itemClick = OnItemClickListener { position, view ->
                 val tv_search = view.findViewById<TextView>(R.id.tv_title)
                 val bundle = Bundle()
-                bundle.putString("str_event",tv_search.text.toString())
-                mNavController.navigate(R.id.action_homeviewpagefragment_to_searchlistfragment,bundle)
+                bundle.putString("str_event", tv_search.text.toString())
+                mNavController.navigate(
+                    R.id.action_homeviewpagefragment_to_searchlistfragment,
+                    bundle
+                )
 
             }
         }
@@ -69,33 +68,71 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         (activity as MainActivity).onSearchClose = {
             listView.visibility = View.GONE
         }
+
+//        (activity as MainActivity).onViewClick = {
+//            when (it) {
+//                R.id.menu_all -> {
+//                    if (state != "all") mViewModel.fatchLeagueEventWhithId(
+//                        view_pager.currentItem
+//                    )
+//                    state = "all"
+//                }
+//                R.id.menu_ended -> {
+//                    if (state != "ended") {
+//                        LogUtils.error("fatchEndLeagueEventWhithId "+  view_pager.currentItem)
+//                        mViewModel.fatchEndLeagueEventWhithId(
+//                            view_pager.currentItem, "Match Finished"
+//                        )
+//                    }
+//                    state = "ended"
+//                }
+//                R.id.menu_future -> {
+//                    if (state != "future") {
+//
+//                        mViewModel.fatchNoStartLeagueEventWhithId(
+//                            view_pager.currentItem, "Not Started"
+//                        )
+//                    }
+//
+//                    state = "future"
+//                }
+//                R.id.menu_sort -> mViewModel.fatchSortData()
+//
+//                R.id.menu_sport -> mNavController.navigate(R.id.action_homeFragment_to_selectFragment)
+//
+//            }
+//        }
     }
 
     override fun onPause() {
-        view_pager.setAdapter(null);
+//        view_pager.setAdapter(null);
         super.onPause()
     }
 
     override fun onResume() {
-        registerViewmodel()
+//        registerViewmodel()
         super.onResume()
     }
 
     fun registerViewmodel() {
         mViewModel.leagueWithEventList.observe(this, Observer {
             mData = it
-//            collectionPagerAdapter = CollectionPagerAdapter(childFragmentManager,it)
-//            view_pager.adapter = collectionPagerAdapter
-//            view_pager.offscreenPageLimit = mData.size
-//            tl_leagues.setupWithViewPager(view_pager)
-//                        (view_pager as RecyclerView).recycledViewPool.setMaxRecycledViews(R.layout.item_home_page,0)
-            mAdapter = CollectionAdapter(this, it)
-            view_pager.adapter = mAdapter
-            view_pager.offscreenPageLimit = mData.size
-            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
-                tab.text = mData[position].league.strLeague
-            }.attach()
-        })
+            val collectionPagerAdapter = CollectionPagerAdapter(childFragmentManager, it)
+            view_pager.adapter = collectionPagerAdapter
+            view_pager.offscreenPageLimit = 1
+            tl_leagues.setupWithViewPager(view_pager)
+            (view_pager as RecyclerView).recycledViewPool.setMaxRecycledViews(
+                R.layout.item_home_page,
+                0
+            )
+//            mAdapter = CollectionAdapter(this, it)
+//            view_pager.adapter = mAdapter
+//
+//            TabLayoutMediator(tl_leagues, view_pager) { tab, position ->
+//                tab.text = mData[position].league.strLeague
+//            }.attach()
+        }
+        )
     }
 
 

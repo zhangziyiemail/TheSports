@@ -109,11 +109,3 @@ class NewsListCacheDiffCall(
 
 
 
-//
-//interface ScrollCallback {
-//    fun onScrollCallback()
-//}
-
-
-
-

@@ -27,7 +27,7 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
     var leagueEvent: Int = 0
 
     private val mViewModel by lazy {
-        ViewModelProvider(requireActivity(), HomeViewModeFactory(HomeListViewRepository())).get(
+        ViewModelProvider(this, HomeViewModeFactory(HomeListViewRepository())).get(
             HomeViewModel::class.java
         )
     }
@@ -42,20 +42,17 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
     override fun actionsOnViewInflate() {
         (activity as MainActivity).showLoading()
         mViewModel.leagueEventLists.observe(this, Observer {
-           mAdapter.update(it)
+            mAdapter.update(it)
             mData = it
             (activity as MainActivity).dismissLoading()
-//            mViewModel.leagueEventLists.removeObservers(this)
         })
 
     }
 
-
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         arguments?.takeIf { it.containsKey("event_id") }?.apply {
             leagueEvent = getInt("event_id") - 1
-//            LogUtils.error("CollectionPagerAdapter " + mViewModel.fatchLeagueEventWhithIdCallback(leagueEvent).toString())
-           mViewModel.fatchLeagueEventWhithId(leagueEvent)
+            mViewModel.fatchLeagueEventWhithId(leagueEvent)
         }
         mBinding?.let { binding ->
             binding.adapter = mAdapter
@@ -95,38 +92,35 @@ class HomeViewPageFragment : BaseFragment<FragmentHomePageBinding>() {
             }
 
             binding.refersh = SwipeRefreshLayout.OnRefreshListener {
-                LogUtils.error(".OnRefreshListener " + leagueEvent)
                 mViewModel.fatchLeagueEventWhithIdFromInternet(leagueEvent)
                 binding.srlEventlist.isRefreshing = false
             }
         }
         (activity as MainActivity).onViewClick = {
             when (it) {
-                R.id.menu_all -> {
-                    if (state != "all") mViewModel.fatchLeagueEventWhithId(
-                        leagueEvent
-                    )
-                    state = "all"
-                }
-                R.id.menu_ended -> {
-                    if (state != "ended") mViewModel.fatchEndLeagueEventWhithId(
-                        leagueEvent, "Match Finished"
-                    )
-                    state = "ended"
-                }
-                R.id.menu_future -> {
-                    if (state != "future") mViewModel.fatchEndLeagueEventWhithId(
-                        leagueEvent, "Not Started"
-                    )
-                    state = "future"
-                }
-                R.id.menu_sort -> mViewModel.fatchSortData()
+//                R.id.menu_all -> {
+//                    if (state != "all") mAdapter.update(mData)
+//                    state = "all"
+//                }
+//                R.id.menu_ended -> {
+//                    if (state != "ended") {
+//                        var list = mData
+//                        mAdapter.update(list.filter { "Match Finished".equals(it.strStatus) })
+//                    }
+//                    state = "ended"
+//                }
+//                R.id.menu_future -> {
+//                    if (state != "future") {
+//                        var list = mData
+//                        mAdapter.update(list.filter { "Not Started".equals(it.strStatus) })
+//                    }
+//                    state = "future"
+//                }
+//                R.id.menu_sort -> mViewModel.fatchSortData()
 
                 R.id.menu_sport -> mNavController.navigate(R.id.action_homeFragment_to_selectFragment)
 
             }
         }
     }
-
-
 }
